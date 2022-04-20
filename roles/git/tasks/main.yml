@@ -1,0 +1,11 @@
+- name: git | Installs git | apt
+  become: yes
+  become_user: root
+  apt:
+    name: git
+    state: present
+
+- name: git | Copies git config | template
+  template:
+    src: "gitconfig.j2"
+    dest: "{{ qfiles.home }}/.gitconfig"
