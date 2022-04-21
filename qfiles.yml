@@ -8,3 +8,5 @@
     - role: zsh
     - role: fonts
     - role: konsole
+    - role: tmux
+    - role: conda
