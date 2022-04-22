@@ -1,0 +1,44 @@
+# - name: nvim | Remove current configs | file
+# block:
+# - name: "~/.config/nvim"
+# file:
+# path: "{{ qfiles.home }}/.config/nvim"
+# state: absent
+# - name: "~/.local/share/nvim"
+# file:
+# path: "{{ qfiles.home }}/.local/share/nvim"
+# state: absent
+# 
+# - name: nvim | Install nvim | deb
+# become: yes
+# become_user: root
+# apt:
+# deb: "{{ nvim.url }}"
+# register: apt_action
+# retries: 100
+# until: apt_action is success
+# 
+# - name: nvim | Setup nvim configs | file
+# file:
+# src: "{{ playbook_dir }}/roles/nvim/files/configs"
+# dest: "{{ qfiles.home }}/.config/nvim"
+# state: link
+# force: yes
+# 
+# - name: nvim | Install tree-sitter | npm
+# become: yes
+# become_user: "{{ qfiles.username }}"
+# npm:
+# name: tree-sitter
+# global: yes
+# 
+# - name: nvim | Install Python support | pip
+# pip:
+# name: pynvim
+# 
+# - name: nvim | Install Node support | npm
+# become: yes
+# become_user: "{{ qfiles.username }}"
+# npm:
+# name: neovim
+# global: yes

@@ -1,0 +1,25 @@
+- name: "lvim | Install nvim | apt"
+  become: yes
+  become_user: root
+  apt:
+    name: neovim
+    state: present
+
+- name: "lvim | Install LunarVim | url"
+  block:
+    - name: Download LunarVim
+      get_url:
+        url: "{{ lvim.url }}"
+        dest: /tmp/install-lvim.sh
+        mode: 0550
+    - name: Run the installer
+      become: yes
+      become_user: "{{ qfiles.username }}"
+      shell: "/tmp/install-lvim.sh"
+    - name: Remove the installer
+      file:
+        state: absent
+        path: /tmp/install-lvim.sh
+  become: yes
+  become_user: "{{ qfiles.username }}"
+  ignore_errors: yes

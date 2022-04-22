@@ -10,3 +10,4 @@
     - role: konsole
     - role: tmux
     - role: conda
+    - role: lvim
