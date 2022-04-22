@@ -1,0 +1,12 @@
+- name: Setting up qfiles
+  hosts: local
+  vars_files:
+    - ./vars/main.yml
+  roles:
+    - role: packages
+    - role: git
+    - role: zsh
+    - role: fonts
+    - role: konsole
+    - role: tmux
+    - role: conda

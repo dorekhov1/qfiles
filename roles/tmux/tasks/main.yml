@@ -1,0 +1,42 @@
+- name: tmux | Installs tmux | apt
+  become: yes
+  become_user: root
+  apt:
+    name: tmux
+    state: present
+
+- name: tmux | Installs cmake | apt
+  become: yes
+  become_user: root
+  apt:
+    name: cmake
+    state: present
+
+- name: tmux | Installs tmux-plugin-manager | apt
+  become: yes
+  become_user: root
+  apt:
+    name: tmux-plugin-manager
+    state: present
+
+- name: oh-my-tmux | Install oh-my-tmux | git
+  git:
+    repo: "https://github.com/gpakosz/.tmux.git"
+    dest: "{{ qfiles.home }}/.tmux"
+    clone: yes
+    update: yes
+    force: yes
+
+- name: tmux | Links .tmux.conf file | file
+  file:
+    src: "{{ qfiles.home }}/.tmux/.tmux.conf"
+    dest: "{{ qfiles.home }}/.tmux.conf"
+    state: link
+    force: yes
+
+- name: tmux | Links .tmux.conf.local file | file
+  file:
+    src: "{{ playbook_dir }}/roles/tmux/files/tmux.conf.local.link"
+    dest: "{{ qfiles.home }}/.tmux.conf.local"
+    state: link
+    force: yes

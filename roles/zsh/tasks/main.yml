@@ -1,0 +1,59 @@
+- name: zsh | Installs zsh | apt
+  become: yes
+  become_user: root
+  apt:
+    name: zsh
+    state: present
+
+- name: zsh | Sets zsh as default shell for {{ qfiles.username }} | command
+  become: yes
+  become_user: root
+  command: chsh -s /bin/zsh {{ qfiles.username }}
+  register: zsh_for_user
+  failed_when: zsh_for_user.rc >= 1
+  changed_when: zsh_for_user.rc == 0
+
+- name: zsh | Checks for oh-my-zsh installation | stat
+  stat:
+    path: "{{ qfiles.home }}/.oh-my-zsh"
+  register: oh_my_zsh_stat
+
+- name: zsh | Installs oh-my-zsh | raw
+  raw: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
+  when: not oh_my_zsh_stat.stat.exists
+
+- name: zsh-syntax-highlighting | Install zsh-syntax-highlighting | git
+  git:
+    repo: "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+    dest: "{{ qfiles.home }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+    clone: yes
+    update: yes
+    force: yes
+
+- name: zsh-autosuggestions | Install zsh-autosuggestions | git
+  git:
+    repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
+    dest: "{{ qfiles.home }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+    clone: yes
+    update: yes
+    force: yes
+
+- name: zsh | Install powerlevel10k theme | git
+  git:
+    repo: "https://github.com/romkatv/powerlevel10k.git" 
+    dest: "{{ qfiles.home }}/.oh-my-zsh/custom/themes/powerlevel10k"
+    clone: yes
+    update: yes
+    force: yes
+
+- name: zsh | Generates .zshrc | template
+  template:
+    src: "zshrc.j2"
+    dest: "{{ qfiles.home }}/.zshrc"
+
+- name: zsh | Setup powerlevel10k config | file
+  file:
+    src: "{{ playbook_dir }}/roles/zsh/files/p10k.zsh.link"
+    dest: "{{ qfiles.home }}/.p10k.zsh"
+    state: link
+    force: yes
