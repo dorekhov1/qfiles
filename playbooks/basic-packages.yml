@@ -1,0 +1,24 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+    - name: Install git
+      apt:
+        name: git
+        state: present
+        update_cache: true
+
+    - name: Install required system packages
+      apt: name={{ item }} state=present update_cache=yes
+      loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'gnupg-agent', 'software-properties-common', 'zsh', 'curl', 'vim', 'jq', 'build-essential', 'tklib', 'zlib1g-dev', 'libssl-dev', 'libffi-dev', 'libxml2', 'libxml2-dev', 'libxslt1-dev', 'libreadline-dev', 'tree', 'ncdu', 'htop', 'tig', 'neovim', 'imagemagick', 'dirmngr', 'gpg', 'gcc', 'fzf', 'bat', 'silversearcher-ag']
+
+
+- name: Install zsh
+  hosts: all
+  become: yes
+
+  roles:
+    - role: gantsign.oh-my-zsh
+      users:
+        - username: root

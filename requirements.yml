@@ -1,0 +1,8 @@
+roles:
+  - name: gantsign.oh-my-zsh
+  - name: morgangraphics.ansible_role_nvm
+  - name: GROG.package
+  - name: buluma.anaconda
+
+collections:
+  - name: community.general

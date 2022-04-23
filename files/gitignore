@@ -1,0 +1,7 @@
+.DS_Store
+.idea
+.tool-versions
+.clj-kondo/
+.lsp/
+.nrepl-port
+node_modules/
